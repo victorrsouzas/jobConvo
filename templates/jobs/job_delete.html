@@ -1,0 +1,13 @@
+<!-- jobs/job_delete.html -->
+{% extends 'jobs/base.html' %}
+
+{% block title %}Deletar {{ job.title }}{% endblock %}
+
+{% block content %}
+    <h1>Deletar {{ job.title }}</h1>
+    <p>Tem certeza de que deseja deletar a vaga "{{ job.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Deletar</button>
+    </form>
+{% endblock %}

@@ -1,14 +1,13 @@
-from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from jobs import views as jobs_views
+from . import views
 
 urlpatterns = [
-    path('jobs-admin/', admin.site.urls),
-    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
-    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('', jobs_views.listar_vagas, name='listar_vagas'),
-    path('vaga/<int:vaga_id>/', jobs_views.detalhar_vaga, name='detalhar_vaga'),
-    path('vaga/<int:vaga_id>/candidatar/', jobs_views.candidatar_vaga, name='candidatar_vaga'),
-    path('relatorio/', jobs_views.relatorio_charts, name='relatorio_charts'),
+    path('', views.JobListView.as_view(), name='job_list'),
+    path('jobs/<int:pk>/', views.JobDetailView.as_view(), name='job_detail'),
+    path('jobs/<int:pk>/apply/', views.job_apply, name='job_apply'),
+    path('jobs/<int:pk>/edit/', views.job_edit, name='job_edit'),
+    path('jobs/<int:pk>/delete/', views.job_delete, name='job_delete'),
+    path('accounts/login/', views.job_login, name='job_login'),
+    # Outras URLs aqui, como candidaturas, edição/deleção de vagas, etc.
 ]

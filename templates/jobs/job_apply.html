@@ -1,0 +1,41 @@
+<!-- jobs/job_apply.html -->
+{% extends 'jobs/base.html' %}
+
+{% block title %}Candidatar-se a {{ job.title }}{% endblock %}
+
+{% block content %}
+    <h1>Candidatar-se a {{ job.title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="salary_expectation">Pretensão Salarial:</label>
+            <select class="form-control" name="salary_expectation" id="salary_expectation">
+                <option value="1000">Até 1.000</option>
+                <option value="1000-2000">De 1.000 a 2.000</option>
+                <option value="2000-3000">De 2.000 a 3.000</option>
+                <option value="3000+">Acima de 3.000</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="experience">Experiência:</label>
+            <select class="form-control" name="experience" id="experience">
+                <option value="no_experience">Sem experiência</option>
+                <option value="1-3_years">1 a 3 anos</option>
+                <option value="3-5_years">3 a 5 anos</option>
+                <option value="5+_years">Mais de 5 anos</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="last_education">Última Escolaridade:</label>
+            <select class="form-control" name="last_education" id="last_education">
+                <option value="fundamental">Ensino fundamental</option>
+                <option value="medio">Ensino médio</option>
+                <option value="tecnologo">Tecnólogo</option>
+                <option value="superior">Ensino Superior</option>
+                <option value="pos_mba_mestrado">Pós / MBA / Mestrado</option>
+                <option value="doutorado">Doutorado</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Candidatar-se</button>
+    </form>
+{% endblock %}

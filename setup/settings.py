@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'jobs',
 ]
 
+LOGIN_REDIRECT_URL = 'job_list'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
