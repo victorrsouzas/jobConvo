@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório com Charts.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Relatório de Vagas e Candidatos por Mês</h1>
+    <canvas id="vagasPorMesChart"></canvas>
+    <canvas id="candidatosPorMesChart"></canvas>
+
+    <script>
+        const vagasPorMesData = {
+            labels: [{% for item in vagas_por_mes %}"{{ item.mes|date:'F Y' }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Vagas Criadas',
+                data: [{% for item in vagas_por_mes %}{{ item.total }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+            }]
+        };
+
+        const candidatosPorMesData = {
+            labels: [{% for item in candidatos_por_mes %}"{{ item.mes|date:'F Y' }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Candidatos Recebidos',
+                data: [{% for item in candidatos_por_mes %}{{ item.total }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1,
+            }]
+        };
+
+        const vagasPorMesChart = new Chart(document.getElementById('vagasPorMesChart'), {
+            type: 'bar',
+            data: vagasPorMesData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const candidatosPorMesChart = new Chart(document.getElementById('candidatosPorMesChart'), {
+            type: 'bar',
+            data: candidatosPorMesData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
