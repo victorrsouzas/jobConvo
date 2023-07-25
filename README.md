@@ -63,7 +63,3 @@ Rota Principal:
 ## Contribuição
 
 Se você quiser contribuir com o projeto, sinta-se à vontade para abrir uma "issue" ou enviar um "pull request" com suas melhorias.
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
