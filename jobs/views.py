@@ -23,15 +23,27 @@ def job_detail(request, job_id):
 
 @login_required
 def job_apply(request, pk):
-    job = Job.objects.get(pk=pk)
+    job = get_object_or_404(Job, pk=pk)
+
     if request.method == 'POST':
+        salary_expectation = request.POST.get('salary_expectation')
+        experience = request.POST.get('experience')
+        last_education = request.POST.get('last_education')
+
+        # Cria ou obtém o candidato associado ao usuário logado (user=request.user)
         candidate, _ = Candidate.objects.get_or_create(user=request.user)
-        candidate.salary_expectation = request.POST['salary_expectation']
-        candidate.experience = request.POST['experience']
-        candidate.last_education = request.POST['last_education']
+
+        # Define os dados do candidato e salva no banco de dados
+        candidate.salary_expectation = salary_expectation
+        candidate.experience = experience
+        candidate.last_education = last_education
         candidate.save()
+
+        # Adiciona o candidato à vaga
         job.candidates.add(candidate)
+
         return redirect('job_list')
+
     return render(request, 'jobs/job_apply.html', {'job': job})
 
 
@@ -85,20 +97,24 @@ class JobDetailView(View):
 
         return render(request, self.template_name, {'job': job, 'candidates': candidates, 'candidate_scores': candidate_scores})
 
+
 class VagasPorMesView(View):
     template_name = 'jobs/vagas_por_mes.html'
 
     def get(self, request):
         # Contagem de vagas criadas por mês
-        vagas_por_mes = Job.objects.annotate(mes=models.functions.TruncMonth('created_date')).values('mes').annotate(total=Count('id'))
+        vagas_por_mes = Job.objects.annotate(mes=models.functions.TruncMonth(
+            'created_date')).values('mes').annotate(total=Count('id'))
 
         return render(request, self.template_name, {'vagas_por_mes': vagas_por_mes})
+
 
 class CandidatosPorMesView(View):
     template_name = 'jobs/candidatos_por_mes.html'
 
     def get(self, request):
         # Contagem de candidatos recebidos por mês
-        candidatos_por_mes = Candidate.objects.annotate(mes=models.functions.TruncMonth('created_at')).values('mes').annotate(total=Count('id'))
+        candidatos_por_mes = Candidate.objects.annotate(mes=models.functions.TruncMonth(
+            'job_applications__created_date')).values('mes').annotate(total=Count('id'))
 
         return render(request, self.template_name, {'candidatos_por_mes': candidatos_por_mes})

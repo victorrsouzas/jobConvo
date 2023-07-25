@@ -30,13 +30,35 @@ JobConvo é um sistema web desenvolvido com Django que permite que empresas crie
    ```
 4. Crie as tabelas do banco de dados:
    ```
+   python manage.py makemigrations jobs
    python manage.py migrate
    ```
-5. Inicie o servidor de desenvolvimento do Django:
+4. Para acessar o painel administrativo do Django, é necessário criar um superusuário:
+   ```
+   python manage.py createsuperuser
+   ```
+5. Rode os testes:
+   ```
+   python manage.py test
+   ```
+6. Inicie o servidor de desenvolvimento do Django:
    ```
    python manage.py runserver
    ```
-6. Acesse o sistema no navegador: http://127.0.0.1:8000/
+7. Acesse o sistema no navegador: http://127.0.0.1:8000/
+
+## Fluxo das Rotas
+Rota Principal:
+- /admin/: Acesso ao painel administrativo do Django
+- /accounts/: URLs de autenticação do Django
+- /: Lista de vagas de emprego (JobListView)
+- /jobs/<int:pk>/: Detalhes de uma vaga específica (JobDetailView)
+- /jobs/<int:pk>/apply/: Candidatura a uma vaga específica (job_apply)
+- /jobs/<int:pk>/edit/: Edição de uma vaga específica (job_edit)
+- /jobs/<int:pk>/delete/: Exclusão de uma vaga específica (job_delete)
+- /accounts/login/: Página de login do usuário (job_login)
+- /vagas-por-mes/: Gráfico com a quantidade de vagas criadas por mês (VagasPorMesView)
+- /candidatos-por-mes/: Gráfico com a quantidade de candidatos recebidos por mês (CandidatosPorMesView)
 
 ## Contribuição
 
