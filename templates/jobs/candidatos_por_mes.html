@@ -1,0 +1,42 @@
+<!-- templates/jobs/candidatos_por_mes.html -->
+{% extends 'jobs/base.html' %}
+{% load static %}
+
+{% block title %}Candidatos Recebidos por Mês{% endblock %}
+
+{% block content %}
+  <h2>Candidatos Recebidos por Mês</h2>
+  <canvas id="candidatosPorMesChart"></canvas>
+
+  <script src="{% static 'path/to/charts.js' %}"></script>
+  <script>
+    const data = {
+      labels: [{% for item in candidatos_por_mes %}"{{ item.mes|date:"F Y" }}",{% endfor %}],
+      datasets: [{
+        label: 'Candidatos Recebidos',
+        data: [{% for item in candidatos_por_mes %}{{ item.total }},{% endfor %}],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1
+      }]
+    };
+
+    const config = {
+      type: 'bar',
+      data: data,
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    };
+
+    var myChart = new Chart(
+      document.getElementById('candidatosPorMesChart'),
+      config
+    );
+  </script>
+{% endblock %}

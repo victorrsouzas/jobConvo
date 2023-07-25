@@ -57,5 +57,17 @@ class Candidate(models.Model):
     last_education = models.CharField(max_length=50, choices=EDUCATION_CHOICES)
     applied_jobs = models.ManyToManyField(Job, related_name='candidates')
 
+    def calculate_candidate_score(self, job):
+        # Implemente a lógica de cálculo da pontuação aqui
+        # Você pode acessar as informações da vaga (job) e do candidato (self) para calcular a pontuação
+        # Retorne a pontuação calculada como um valor numérico
+        # Por exemplo:
+        score = 0
+        if self.salary_expectation <= job.salary_range:
+            score += 1
+        if self.last_education in job.education_required:
+            score += 1
+        return score
+
     def __str__(self):
         return self.user.email
