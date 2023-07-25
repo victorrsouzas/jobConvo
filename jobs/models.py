@@ -1,3 +1,4 @@
+# models.py
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -26,7 +27,6 @@ class Job(models.Model):
         max_length=50, choices=JOB_EDUCATION_CHOICES)
     company = models.ForeignKey(
         User, related_name='jobs', on_delete=models.CASCADE)
-    # Add the created_date field with auto_now_add=True
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -59,18 +59,17 @@ class Candidate(models.Model):
 
     name = models.CharField(max_length=100)
     salary_expectation = models.CharField(
-    max_length=50, choices=SALARY_CHOICES)
+        max_length=50, choices=SALARY_CHOICES)
     experience = models.CharField(max_length=50, choices=EXPERIENCE_CHOICES)
     last_education = models.CharField(max_length=50, choices=EDUCATION_CHOICES)
     job_applications = models.ManyToManyField(Job, related_name='candidates')
-    # Add the created_date field with auto_now_add=True
     created_date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, related_name='candidates', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, related_name='candidates', on_delete=models.CASCADE)
 
     def calculate_candidate_score(self, job):
         score = 0
 
-        # Lógica para verificar se o candidato está dentro da faixa salarial da vaga
         if self.salary_expectation:
             if job.salary_range == 'Até 1.000' and int(self.salary_expectation) <= 1000:
                 score += 1
@@ -81,7 +80,6 @@ class Candidate(models.Model):
             elif job.salary_range == 'Acima de 3.000' and int(self.salary_expectation) > 3000:
                 score += 1
 
-        # Lógica para verificar se o candidato tem escolaridade suficiente
         education_values = {
             'Ensino fundamental': 1,
             'Ensino médio': 2,
@@ -90,10 +88,14 @@ class Candidate(models.Model):
             'Pós / MBA / Mestrado': 5,
             'Doutorado': 6
         }
-        job_education_value = education_values[job.education_required]
-        candidate_education_value = education_values[self.last_education]
-        if candidate_education_value >= job_education_value:
-            score += 1
+
+        # Verificar se o valor existe no dicionário antes de acessá-lo
+        if job.education_required in education_values and self.last_education in education_values:
+            job_education_value = education_values[job.education_required]
+            candidate_education_value = education_values[self.last_education]
+
+            if candidate_education_value >= job_education_value:
+                score += 1
 
         return score
 
